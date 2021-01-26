@@ -22,7 +22,7 @@ const server = net.createServer(function (socket) {
             socket.write(Buffer.alloc(1, 1));
         } else {
             let avl = parser.getAvl();
-            let parsed = new ProtocolParser(buffer);
+            let parsed = new ProtocolParser(buffer.toString());
             console.log(parsed.Content);
 
 
