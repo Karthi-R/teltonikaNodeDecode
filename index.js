@@ -1,8 +1,9 @@
 const net = require('net');
 const conf = require('./conf.json');
+// const { bufferFromBufferString } = require('./helper');
 const Parser = require('teltonika-parser-ex');
 const binutils = require('binutils64');
-const { ProtocolParser } = require('complete-teltonika-parser')
+// const { ProtocolParser } = require('complete-teltonika-parser')
 
 
 const server = net.createServer(function (socket) {
@@ -15,21 +16,19 @@ const server = net.createServer(function (socket) {
     })
 
     socket.on('data', (data) => {
-        console.log(data);
-        let buffer = data;
+        const buffer = data;
         let parser = new Parser(buffer);
         if (parser.isImei) {
+            // const imei = data.toString();
             socket.write(Buffer.alloc(1, 1));
         } else {
             let avl = parser.getAvl();
-            let parsed = new ProtocolParser(buffer.toString());
-            console.log(parsed.Content);
+            console.log(avl['records'][0]['gps']);
 
 
 
             let writer = new binutils.BinaryWriter();
             writer.WriteInt32(avl.number_of_data);
-
             let response = writer.ByteBuffer;
             socket.write(response);
         }
