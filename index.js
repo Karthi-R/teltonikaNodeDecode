@@ -2,6 +2,7 @@ const net = require('net');
 const conf = require('./conf.json');
 const Parser = require('teltonika-parser-ex');
 const binutils = require('binutils64');
+const { ProtocolParser } = require('complete-teltonika-parser')
 
 
 const server = net.createServer(function (socket) {
@@ -21,7 +22,9 @@ const server = net.createServer(function (socket) {
             socket.write(Buffer.alloc(1, 1));
         } else {
             let avl = parser.getAvl();
-            console.log(avl.dictionary);
+            let parsed = new ProtocolParser(buffer);
+            console.log(parsed.Content);
+
 
 
             let writer = new binutils.BinaryWriter();
