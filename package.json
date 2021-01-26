@@ -10,7 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "net": "^1.0.2",
-    "redis": "^3.0.2"
+    "redis": "^3.0.2",
+    "teltonika-parser-ex": "0.0.16"
   },
   "engines": {
     "node": "12.x"

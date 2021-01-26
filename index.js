@@ -1,24 +1,35 @@
-// const decodeClass = require('./decode')
-const net = require('net')
-// const redis = require('redis')
-const conf = require('./conf.json')
+const net = require('net');
+const conf = require('./conf.json');
+const Parser = require('teltonika-parser-ex');
+const binutils = require('binutils64');
+
 
 const server = net.createServer(function (socket) {
     console.log('client connected')
 
-    // const decode = new decodeClass(redis.createClient(), socket)
 
     socket.on('end', function () {
         console.log('client disconnected')
-        //Si cliente se deconecta
-        // decode.redisClient.quit()
+
     })
 
-    socket.on('data', function (data) {
+    socket.on('data', (data) => {
         console.log(data);
+        let buffer = data;
+        let parser = new Parser(buffer);
+        if (parser.isImei) {
+            socket.write(Buffer.alloc(1, 1));
+        } else {
+            let avl = parser.getAvl();
 
-        // socket.write(data.byteLength === 17 ? decode.imei(data) : decode.rawData(data))
-        // decode.pendingCommand()
+            let writer = new binutils.BinaryWriter();
+            writer.WriteInt32(avl.number_of_data);
+
+            let response = writer.ByteBuffer;
+            socket.write(response);
+        }
+
+
     });
     socket.on('drain', data => {
         console.log('Vacio', data)
