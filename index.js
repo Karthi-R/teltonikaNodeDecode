@@ -15,13 +15,15 @@ const server = net.createServer(function (socket) {
     })
 
     var socketOnData = function (data) {
-        console.log('data received..')
+        console.log('on data()')
         const buffer = data;
         let parser = new Parser(buffer);
         if (parser.isImei) {
             // const imei = data.toString();
             socket.write(Buffer.alloc(1, 1));
+            console.log('Imei data received..')
         } else {
+            console.log('AVL data received..')
             let avl = parser.getAvl();
             console.log(avl['records'][0]['gps']);
 
