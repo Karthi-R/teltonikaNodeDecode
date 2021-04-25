@@ -4,6 +4,7 @@
   "description": "Conector tcp para gps teltonika",
   "main": "index.js",
   "scripts": {
+    "start": "Node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Yostin Vargas",

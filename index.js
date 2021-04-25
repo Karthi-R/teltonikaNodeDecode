@@ -12,10 +12,10 @@ const server = net.createServer(function (socket) {
 
     socket.on('end', function () {
         console.log('client disconnected')
-
     })
 
-    socket.on('data', (data) => {
+    var socketOnData = function (data) {
+        console.log('data received..')
         const buffer = data;
         let parser = new Parser(buffer);
         if (parser.isImei) {
@@ -32,13 +32,25 @@ const server = net.createServer(function (socket) {
             let response = writer.ByteBuffer;
             socket.write(response);
         }
+    };
 
-
-    });
     socket.on('drain', data => {
         console.log('Vacio', data)
     })
+
+    var socketOnClose = function(error) {
+        console.log("Connection closed. IMEI" + ":" + socket.imei + " - " + error);
+    };
+
+    var socketOnError = function(error) {
+        console.log("Error cocket IMEI. Bąd socket IMEI" + ":" + socket.imei + " - " + error);
+    };
+
+    socket.on('data', socketOnData);
+    socket.on('error', socketOnError);
+    socket.on('close', socketOnClose);
 });
 
 server.listen(conf.port);
 console.log('Listening on port:', conf.port)
+    
