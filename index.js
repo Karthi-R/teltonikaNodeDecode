@@ -1,9 +1,9 @@
 const net = require('net');
-const conf = require('./conf.json');
 // const { bufferFromBufferString } = require('./helper');
 const Parser = require('teltonika-parser-ex');
 const binutils = require('binutils64');
 // const { ProtocolParser } = require('complete-teltonika-parser')
+const PORT = process.env.PORT || 3000;
 
 
 const server = net.createServer(function (socket) {
@@ -24,8 +24,6 @@ const server = net.createServer(function (socket) {
         } else {
             let avl = parser.getAvl();
             console.log(avl['records'][0]['gps']);
-
-
 
             let writer = new binutils.BinaryWriter();
             writer.WriteInt32(avl.number_of_data);
@@ -51,6 +49,6 @@ const server = net.createServer(function (socket) {
     socket.on('close', socketOnClose);
 });
 
-server.listen(conf.port);
-console.log('Listening on port:', conf.port)
+server.listen(PORT);
+console.log('Listening on port:', PORT)
     
