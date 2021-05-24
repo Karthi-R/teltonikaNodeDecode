@@ -3,7 +3,7 @@ const net = require('net');
 const Parser = require('teltonika-parser-ex');
 const binutils = require('binutils64');
 // const { ProtocolParser } = require('complete-teltonika-parser')
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 7070;
 
 
 const server = net.createServer(function (socket) {
@@ -19,9 +19,10 @@ const server = net.createServer(function (socket) {
         const buffer = data;
         let parser = new Parser(buffer);
         if (parser.isImei) {
-            // const imei = data.toString();
+            const imei = data.toString();
+
             socket.write(Buffer.alloc(1, 1));
-            console.log('Imei data received..')
+            console.log('Imei (%s) data received..', imei);
         } else {
             console.log('AVL data received..')
             let avl = parser.getAvl();
